@@ -1,4 +1,5 @@
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 fun main() {
     assertEquals(1, count_multiples(2, 6))
@@ -9,6 +10,9 @@ fun main() {
 
     assertEquals(3, count_occurrences(2, arrayOf(1, arrayOf(4, arrayOf(5, 2), 2), arrayOf(8, arrayOf(2, 9)))))
     assertEquals(1, count_occurrences(5, arrayOf(1, arrayOf(4, arrayOf(5, 2), 2), arrayOf(8, arrayOf(2, 9)))))
+
+    assertTrue(arrayOf(1, 2, 8, 9, 10, 14, 15, 23).contentEquals(merge(arrayOf(1, 8, 9, 14, 15), arrayOf(2, 10, 23))))
+
 }
 
 fun count_multiples(a: Int, b: Int): Int {
@@ -36,4 +40,36 @@ fun count_occurrences(item: Int, array: Array<Any>): Int {
         } else if (array[i] == item) count += 1
     }
     return count
+}
+
+fun merge(sorted1: Array<Int>, sorted2: Array<Int>): Array<Int> {
+    val res = Array<Int>(sorted1.size + sorted2.size, { 0 })
+    merge(sorted1, sorted2, 0, 0, res, 0)
+    return res
+}
+
+private fun merge(
+    sorted1: Array<Int>,
+    sorted2: Array<Int>,
+    ind1: Int,
+    ind2: Int,
+    merged: Array<Int>,
+    indMerged: Int
+) {
+    if (ind1 < sorted1.size && ind2 < sorted2.size) {
+        if (sorted1[ind1] <= sorted2[ind2]) {
+            merged[indMerged] = sorted1[ind1]
+            merge(sorted1, sorted2, ind1 + 1, ind2, merged, indMerged + 1)
+        } else {
+            merged[indMerged] = sorted2[ind2]
+            merge(sorted1, sorted2, ind1, ind2 + 1, merged, indMerged + 1)
+        }
+
+    } else if (ind1 < sorted1.size) {
+        merged[indMerged] = sorted1[ind1]
+        merge(sorted1, sorted2, ind1 + 1, ind2, merged, indMerged + 1)
+    } else if (ind2 < sorted2.size) {
+        merged[indMerged] = sorted2[ind2]
+        merge(sorted1, sorted2, ind1, ind2 + 1, merged, indMerged + 1)
+    }
 }
