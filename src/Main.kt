@@ -1,3 +1,4 @@
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -13,6 +14,10 @@ fun main() {
 
     assertTrue(arrayOf(1, 2, 8, 9, 10, 14, 15, 23).contentEquals(merge(arrayOf(1, 8, 9, 14, 15), arrayOf(2, 10, 23))))
 
+    reverse(LinkedList(1, 2, 3, 4)).printList()
+    println()
+    LinkedList(1, 2, 3, 4).printList()
+    assertTrue(LinkedList(4, 3, 2, 1).contentEquals(reverse(LinkedList(1, 2, 3, 4))))
 }
 
 fun count_multiples(a: Int, b: Int): Int {
@@ -72,4 +77,24 @@ private fun merge(
         merged[indMerged] = sorted2[ind2]
         merge(sorted1, sorted2, ind1, ind2 + 1, merged, indMerged + 1)
     }
+}
+
+fun reverse(list: LinkedList): LinkedList {
+    if (list.head == null || list.head!!.next == null) return list
+    var i = list.head
+    var j = i!!.next
+    var k = j!!.next
+
+    i.next = null
+    while (k != null) {
+        j!!.next = i
+        i = j
+        j = k
+        k = k.next
+    }
+    j!!.next = i
+
+    list.head = j
+
+    return list
 }
