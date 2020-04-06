@@ -18,6 +18,13 @@ fun main() {
     println()
     LinkedList(1, 2, 3, 4).printList()
     assertTrue(LinkedList(4, 3, 2, 1).contentEquals(reverse(LinkedList(1, 2, 3, 4))))
+
+    println()
+    reverseRecursively(LinkedList(1, 2, 3, 4)).printList()
+    println()
+    LinkedList(1, 2, 3, 4).printList()
+    assertTrue(LinkedList(4, 3, 2, 1).contentEquals(reverseRecursively(LinkedList(1, 2, 3, 4))))
+
 }
 
 fun count_multiples(a: Int, b: Int): Int {
@@ -97,4 +104,24 @@ fun reverse(list: LinkedList): LinkedList {
     list.head = j
 
     return list
+}
+
+fun reverseRecursively(list: LinkedList): LinkedList {
+    if (list.head == null || list.head!!.next == null) return list
+    val i = list.head
+    var j = i!!.next
+    val k = j!!.next
+    i.next = null
+    j = reverse(list, j, k)
+    j.next = list.head
+    list.head = j
+
+    return list
+}
+
+private fun reverse(list: LinkedList, j: LinkedList.Node, k: LinkedList.Node?): LinkedList.Node {
+    if (k == null) return j
+    j.next = list.head
+    list.head = j
+    return reverse(list, k, k.next)
 }
